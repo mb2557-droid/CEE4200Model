@@ -67,3 +67,35 @@ num_decisions = 3
 pop_size = 400
 plot_pareto(num_decisions, pop_size, data_schoharie, reservoir="Schoharie")
 plot_pareto(num_decisions, pop_size, data_ashokan, reservoir="Ashokan")
+
+
+
+# Uncertainty analysis
+x = 20*365 
+
+# 40 years
+front40, vars40 = plot_pareto(num_decisions, pop_size, data_schoharie, reservoir="Schoharie", return_data=True)
+front40, vars40 = plot_pareto(num_decisions, pop_size, data_ashokan, reservoir="Ashokan", return_data=True)
+
+# first 20 years
+
+data_schoharie_first20 = data_schoharie.copy()
+data_schoharie_first20['daily_flows'] = schoharie_flows[:x]
+front20a, vars20a = plot_pareto(num_decisions, pop_size, data_schoharie_first20, reservoir="Schoharie", return_data=True)
+
+data_ashokan_first20 = data_ashokan.copy()
+data_ashokan_first20['daily_flows'] = ashokan_flows[:x]
+front20a, vars20a = plot_pareto(num_decisions, pop_size, data_ashokan_first20, reservoir="Ashokan", return_data=True)
+
+# second 20 years
+data_schoharie_last20 = data_schoharie.copy()
+data_schoharie_last20['daily_flows'] = schoharie_flows[x:]
+front20b, vars20b = plot_pareto(num_decisions, pop_size, data_schoharie_last20, reservoir="Schoharie", return_data=True)
+
+data_ashokan_last20 = data_ashokan.copy()
+data_ashokan_last20['daily_flows'] = ashokan_flows[x:]
+front20b, vars20b = plot_pareto(num_decisions, pop_size, data_ashokan_last20, reservoir="Ashokan", return_data=True)
+
+# plot all three
+plot_uncertainty(front40, front20a, front20b, reservoir="Schoharie")
+plot_uncertainty(front40, front20a, front20b, reservoir="Ashokan")

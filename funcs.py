@@ -224,7 +224,7 @@ class LakeOptimization(Problem):
                                                             self.data['v_max'], self.data['optimizing'])    
 
 
-def plot_pareto(num_points, population_size, data, reservoir):
+def plot_pareto(num_points, population_size, data, reservoir, return_data=False):
     '''
     Creates two plots
     1. Control policies for all pareto efficient solutions
@@ -271,6 +271,11 @@ def plot_pareto(num_points, population_size, data, reservoir):
     pareto_solutions = [s for s, keep in zip(feasible_solutions, pareto_mask) if keep]
     pareto_obj12 = obj12[pareto_mask]
 
+    # Save front as data
+    if return_data:
+        pareto_vars = np.array([s.variables for s, keep in zip(feasible_solutions, pareto_mask) if keep])
+        return pareto_obj12, pareto_vars
+    
     # Plot control policy for nondominated feasible solutions
     for i, s in enumerate(pareto_solutions, start=1):
         v,d = calculate_control_policy2(list(s.variables), data["v_max"])
@@ -301,4 +306,20 @@ def plot_pareto(num_points, population_size, data, reservoir):
             f"release nodes = {np.round(sol.variables, 2)}"
         )
 
+    plt.show()
+
+
+def plot_uncertainty(front1, front2, front3, reservoir):
+    plt.figure(figsize=(7,5))
+
+    plt.scatter(front1[:,0], front1[:,1], label="40 years", s=40, color='blue')
+    plt.scatter(front2[:,0], front2[:,1], label="First 20 years", s=40, color='red')
+    plt.scatter(front3[:,0], front3[:,1], label="Second 20 years", s=40, color='green')
+
+    plt.title(f"Uncertainty Analysis – {reservoir}\nPareto Fronts Comparison")
+    plt.xlabel("Average daily deficit on demand (MGD)")
+    plt.ylabel("Average daily deficit on dead storage (MGD)")
+    plt.grid(True)
+    plt.tight_layout()
+    plt.legend()
     plt.show()
