@@ -1,7 +1,7 @@
 '''
 This is a script that stores all of the data for each reservoir and runs the model
 
-12/3/2025
+12/12/2025
 Matt Burgos mb2557
 Rachel Pyeon rp653
 '''
@@ -64,7 +64,7 @@ data_ashokan = {
 
 # Choose number of decision variables and population size
 num_decisions = 3
-pop_size = 400
+pop_size = 1000
 plot_pareto(num_decisions, pop_size, data_schoharie, reservoir="Schoharie")
 plot_pareto(num_decisions, pop_size, data_ashokan, reservoir="Ashokan")
 
